@@ -1,10 +1,13 @@
+let roundCount = 0;
+
 const gameBoard = (function () {
   const items = ["", "", "", "", "", "", "", "", ""];
 
   const getItems = () => items;
   const setItems = (index, player) => items.splice(index, 1, player);
+  const clearBoard = () => (items = ["", "", "", "", "", "", "", "", ""]);
 
-  return { getItems, setItems };
+  return { getItems, setItems, clearBoard };
 })();
 
 function players(name, weapon) {
@@ -17,25 +20,77 @@ function players(name, weapon) {
 }
 
 function game(playerOneMove, playerTwoMove) {
-  const playerOne = players("Hendrik", "X");
-  const playerTwo = players("Uwe", "O");
-  playerOne.setPlayer();
-  playerTwo.setPlayer();
+  if (!(Number.isInteger(playerOneMove) && Number.isInteger(playerTwoMove))) {
+    console.log("Please enter a valid number");
+  } else {
+    const playerOne = players("Hendrik", "x");
+    const playerTwo = players("Uwe", "o");
+    playerOne.setPlayer();
+    playerTwo.setPlayer();
 
-  gameBoard.setItems(playerOneMove, playerOne.getPlayerWeapon());
-  gameBoard.setItems(playerTwoMove, playerTwo.getPlayerWeapon());
+    roundCount++;
 
-  const [i1, i2, i3, i4, i5, i6, i7, i8, i9] = gameBoard.getItems();
+    gameBoard.setItems(playerOneMove, playerOne.getPlayerWeapon());
+    gameBoard.setItems(playerTwoMove, playerTwo.getPlayerWeapon());
 
-  switch (true) {
-    case i1 && i2 && i3 === "O":
-      console.log(`${playerTwo.getPlayerName()} wins`);
-      break;
-    case i1 && i2 && i3 === "X":
-      console.log(`${playerOne.getPlayerName()} wins`);
+    const [i1, i2, i3, i4, i5, i6, i7, i8, i9] = gameBoard.getItems();
+
+    switch (true) {
+      case i1 === "x" && i2 === "x" && i3 === "x":
+        console.log(`${playerOne.getPlayerName()} wins`);
+        gameBoard.clearBoard("");
+        break;
+      case i1 === "o" && i2 === "o" && i3 === "o":
+        console.log(`${playerTwo.getPlayerName()} wins`);
+        break;
+      case i4 === "x" && i5 === "x" && i6 === "x":
+        console.log(`${playerOne.getPlayerName()} wins`);
+        break;
+      case i4 === "o" && i5 === "o" && i6 === "o":
+        console.log(`${playerTwo.getPlayerName()} wins`);
+        break;
+      case i7 === "x" && i8 === "x" && i9 === "x":
+        console.log(`${playerOne.getPlayerName()} wins`);
+        break;
+      case i7 === "o" && i8 === "o" && i9 === "o":
+        console.log(`${playerTwo.getPlayerName()} wins`);
+        break;
+      case i1 === "x" && i4 === "x" && i7 === "x":
+        console.log(`${playerOne.getPlayerName()} wins`);
+        break;
+      case i1 === "o" && i4 === "o" && i7 === "o":
+        console.log(`${playerTwo.getPlayerName()} wins`);
+        break;
+      case i2 === "x" && i5 === "x" && i8 === "x":
+        console.log(`${playerOne.getPlayerName()} wins`);
+        break;
+      case i2 === "o" && i5 === "o" && i8 === "o":
+        console.log(`${playerTwo.getPlayerName()} wins`);
+        break;
+      case i3 === "x" && i6 === "x" && i9 === "x":
+        console.log(`${playerOne.getPlayerName()} wins`);
+        break;
+      case i3 === "o" && i6 === "o" && i9 === "o":
+        console.log(`${playerTwo.getPlayerName()} wins`);
+        break;
+      case i1 === "x" && i5 === "x" && i9 === "x":
+        console.log(`${playerOne.getPlayerName()} wins`);
+        break;
+      case i1 === "o" && i5 === "o" && i9 === "o":
+        console.log(`${playerTwo.getPlayerName()} wins`);
+        break;
+      case i3 === "x" && i5 === "x" && i7 === "x":
+        console.log(`${playerOne.getPlayerName()} wins`);
+        break;
+      case i3 === "o" && i5 === "o" && i7 === "o":
+        console.log(`${playerTwo.getPlayerName()} wins`);
+        break;
+      case roundCount === 3:
+        console.log("Draw");
+    }
+
+    return { playerOne, playerTwo };
   }
-
-  return { playerOne, playerTwo };
 }
 
 console.log(gameBoard.getItems());

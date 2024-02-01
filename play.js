@@ -19,15 +19,15 @@ function players(name, weapon) {
   return { getPlayerName, getPlayerWeapon, setPlayer };
 }
 
+const playerOne = players("Hendrik", "x");
+playerOne.setPlayer();
+const playerTwo = players("Uwe", "o");
+playerTwo.setPlayer();
+
 function game(playerOneMove, playerTwoMove) {
   if (!(Number.isInteger(playerOneMove) && Number.isInteger(playerTwoMove))) {
     console.log("Please enter a valid number");
   } else {
-    const playerOne = players("Hendrik", "x");
-    const playerTwo = players("Uwe", "o");
-    playerOne.setPlayer();
-    playerTwo.setPlayer();
-
     roundCount++;
 
     gameBoard.setItems(playerOneMove, playerOne.getPlayerWeapon());
@@ -88,8 +88,6 @@ function game(playerOneMove, playerTwoMove) {
       case roundCount === 3:
         console.log("Draw");
     }
-
-    return { playerOne, playerTwo };
   }
 }
 

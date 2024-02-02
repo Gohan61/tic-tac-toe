@@ -1,0 +1,20 @@
+body {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+}
+
+.gameContainer {
+  height: min(800px, 100%);
+  width: min(800px, 100%);
+}
+
+.gameBoard {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  height: max(500px, 100%);
+  width: max(500px, 100%);
+}

@@ -1,5 +1,6 @@
 let roundCount = 0;
 const form = document.querySelector("#playerInfo");
+const submitButton = document.querySelector("button[type='submit']");
 
 const gameBoard = (function () {
   const items = ["", "", "", "", "", "", "", "", ""];
@@ -28,8 +29,16 @@ const playerInfo = function () {
   return { playerOne, playerTwo, currentWeapon };
 };
 
-form.addEventListener("click", (e) => {
+form.addEventListener("submit", (e) => {
   e.preventDefault();
+
+  const displayItems = getDisplay.getGameBoardDisplay();
+  displayItems.forEach((el) => (el.textContent = ""));
+  gameBoard.clearBoard();
+  const winner = getGameWinner.getWinner();
+  winner.textContent = "";
+  roundCount = 0;
+
   const playerOneInput = document.querySelector("#playerOne");
   const playerTwoInput = document.querySelector("#playerTwo");
 
@@ -39,7 +48,7 @@ form.addEventListener("click", (e) => {
   playerInfo.playerTwo = players(playerTwoInput.value, "o");
   playerInfo.playerTwo.setPlayer();
   playerInfo();
-  display();
+  getDisplay.items();
 });
 
 function game(playerOneMove, playerTwoMove) {
@@ -59,91 +68,124 @@ function game(playerOneMove, playerTwoMove) {
     case i1 === "x" && i2 === "x" && i3 === "x":
       winner.textContent = `${playerInfo.playerOne.getPlayerName()} wins`;
       gameBoard.clearBoard("");
-      removeListener();
+      getDisplay.remove();
       break;
     case i1 === "o" && i2 === "o" && i3 === "o":
       winner.textContent = `${playerInfo.playerTwo.getPlayerName()} wins`;
       gameBoard.clearBoard("");
+      getDisplay.remove();
       break;
     case i4 === "x" && i5 === "x" && i6 === "x":
       winner.textContent = `${playerInfo.playerOne.getPlayerName()} wins`;
       gameBoard.clearBoard("");
+      getDisplay.remove();
       break;
     case i4 === "o" && i5 === "o" && i6 === "o":
       winner.textContent = `${playerInfo.playerTwo.getPlayerName()} wins`;
       gameBoard.clearBoard("");
+      getDisplay.remove();
       break;
     case i7 === "x" && i8 === "x" && i9 === "x":
       winner.textContent = `${playerInfo.playerOne.getPlayerName()} wins`;
       gameBoard.clearBoard("");
+      getDisplay.remove();
       break;
     case i7 === "o" && i8 === "o" && i9 === "o":
       winner.textContent = `${playerInfo.playerTwo.getPlayerName()} wins`;
       gameBoard.clearBoard("");
+      getDisplay.remove();
       break;
     case i1 === "x" && i4 === "x" && i7 === "x":
       winner.textContent = `${playerInfo.playerOne.getPlayerName()} wins`;
       gameBoard.clearBoard("");
+      getDisplay.remove();
       break;
     case i1 === "o" && i4 === "o" && i7 === "o":
       winner.textContent = `${playerInfo.playerTwo.getPlayerName()} wins`;
       gameBoard.clearBoard("");
+      getDisplay.remove();
       break;
     case i2 === "x" && i5 === "x" && i8 === "x":
       winner.textContent = `${playerInfo.playerOne.getPlayerName()} wins`;
       gameBoard.clearBoard("");
+      getDisplay.remove();
       break;
     case i2 === "o" && i5 === "o" && i8 === "o":
       winner.textContent = `${playerInfo.playerTwo.getPlayerName()} wins`;
       gameBoard.clearBoard("");
+      getDisplay.remove();
       break;
     case i3 === "x" && i6 === "x" && i9 === "x":
       winner.textContent = `${playerInfo.playerOne.getPlayerName()} wins`;
       gameBoard.clearBoard("");
+      getDisplay.remove();
       break;
     case i3 === "o" && i6 === "o" && i9 === "o":
       winner.textContent = `${playerInfo.playerTwo.getPlayerName()} wins`;
       gameBoard.clearBoard("");
+      getDisplay.remove();
       break;
     case i1 === "x" && i5 === "x" && i9 === "x":
       winner.textContent = `${playerInfo.playerOne.getPlayerName()} wins`;
       gameBoard.clearBoard("");
+      getDisplay.remove();
       break;
     case i1 === "o" && i5 === "o" && i9 === "o":
       winner.textContent = `${playerInfo.playerTwo.getPlayerName()} wins`;
       gameBoard.clearBoard("");
+      getDisplay.remove();
       break;
     case i3 === "x" && i5 === "x" && i7 === "x":
       winner.textContent = `${playerInfo.playerOne.getPlayerName()} wins`;
       gameBoard.clearBoard("");
+      getDisplay.remove();
       break;
     case i3 === "o" && i5 === "o" && i7 === "o":
       winner.textContent = `${playerInfo.playerTwo.getPlayerName()} wins`;
       gameBoard.clearBoard("");
+      getDisplay.remove();
       break;
     case roundCount === 9:
       winner.textContent = "Draw";
       gameBoard.clearBoard("");
+      getDisplay.remove();
   }
+  const getWinner = () => winner;
+  return { getWinner };
 }
 
-const display = function () {
+const getGameWinner = game();
+
+function display() {
   const gameBoardDisplay = document.querySelectorAll(".boardItem");
 
-  const listenClick = gameBoardDisplay.forEach((el) =>
-    el.addEventListener("click", () => {
-      if (el.textContent !== "") {
-      } else if (el.textContent === "" && playerInfo.currentWeapon === "x") {
-        el.textContent = playerInfo.currentWeapon;
-        game(parseInt(el.getAttribute("index")), undefined);
-        playerInfo.currentWeapon = playerInfo.playerTwo.getPlayerWeapon();
-      } else {
-        el.textContent = playerInfo.currentWeapon;
-        game(undefined, parseInt(el.getAttribute("index")));
-        playerInfo.currentWeapon = playerInfo.playerOne.getPlayerWeapon();
-      }
-    })
-  );
-};
+  const items = () =>
+    gameBoardDisplay.forEach((el) =>
+      el.addEventListener("click", changeDisplayItems)
+    );
+
+  function changeDisplayItems() {
+    if (this.textContent !== "") {
+    } else if (this.textContent === "" && playerInfo.currentWeapon === "x") {
+      this.textContent = playerInfo.currentWeapon;
+      game(parseInt(this.getAttribute("index")), undefined);
+      playerInfo.currentWeapon = playerInfo.playerTwo.getPlayerWeapon();
+    } else {
+      this.textContent = playerInfo.currentWeapon;
+      game(undefined, parseInt(this.getAttribute("index")));
+      playerInfo.currentWeapon = playerInfo.playerOne.getPlayerWeapon();
+    }
+  }
+
+  const remove = () =>
+    gameBoardDisplay.forEach((el) =>
+      el.removeEventListener("click", changeDisplayItems)
+    );
+
+  const getGameBoardDisplay = () => gameBoardDisplay;
+  return { remove, items, getGameBoardDisplay };
+}
+
+const getDisplay = display();
 
 console.log(gameBoard.getItems());

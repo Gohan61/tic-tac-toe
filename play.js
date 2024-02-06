@@ -21,13 +21,26 @@ function players(name, weapon) {
   return { getPlayerName, getPlayerWeapon, setPlayer };
 }
 
-const playerInfo = function () {
+function playerDetails() {
   let playerOne = undefined;
   let playerTwo = undefined;
 
-  let currentWeapon = playerInfo.playerOne.getPlayerWeapon();
-  return { playerOne, playerTwo, currentWeapon };
-};
+  let currentWeapon = "x";
+  const getCurrentWeapon = () => currentWeapon;
+  const setCurrentWeaponOne = () =>
+    (currentWeapon = playerInfo.playerOne.getPlayerWeapon());
+  const setCurrentWeaponTwo = () =>
+    (currentWeapon = playerInfo.playerTwo.getPlayerWeapon());
+  return {
+    playerOne,
+    playerTwo,
+    getCurrentWeapon,
+    setCurrentWeaponTwo,
+    setCurrentWeaponOne,
+  };
+}
+
+const playerInfo = playerDetails();
 
 form.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -47,7 +60,9 @@ form.addEventListener("submit", (e) => {
 
   playerInfo.playerTwo = players(playerTwoInput.value, "o");
   playerInfo.playerTwo.setPlayer();
-  playerInfo();
+
+  playerInfo.getCurrentWeapon();
+
   getDisplay.items();
 });
 
@@ -166,14 +181,17 @@ function display() {
 
   function changeDisplayItems() {
     if (this.textContent !== "") {
-    } else if (this.textContent === "" && playerInfo.currentWeapon === "x") {
-      this.textContent = playerInfo.currentWeapon;
+    } else if (
+      this.textContent === "" &&
+      playerInfo.getCurrentWeapon() === "x"
+    ) {
+      this.textContent = playerInfo.getCurrentWeapon();
       game(parseInt(this.getAttribute("index")), undefined);
-      playerInfo.currentWeapon = playerInfo.playerTwo.getPlayerWeapon();
+      playerInfo.setCurrentWeaponTwo();
     } else {
-      this.textContent = playerInfo.currentWeapon;
+      this.textContent = playerInfo.getCurrentWeapon();
       game(undefined, parseInt(this.getAttribute("index")));
-      playerInfo.currentWeapon = playerInfo.playerOne.getPlayerWeapon();
+      playerInfo.setCurrentWeaponOne();
     }
   }
 
